@@ -41,11 +41,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Types\Collections.cs" />
+    <Compile Include="Types\Episode.cs" />
+    <Compile Include="Types\ExternalShow.cs" />
+    <Compile Include="Types\ExternalSource.cs" />
+    <Compile Include="Types\Observable.cs" />
+    <Compile Include="Types\Season.cs" />
+    <Compile Include="Types\Show.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BulkLoaders\" />
     <Folder Include="Repository\" />
-    <Folder Include="Types\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
