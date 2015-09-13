@@ -41,6 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\AbstractRepositoryFactory.cs" />
+    <Compile Include="Repository\IConfigurationRepository.cs" />
+    <Compile Include="Repository\IEpisodeRepository.cs" />
+    <Compile Include="Repository\IExternalShowRepository.cs" />
+    <Compile Include="Repository\IExternalSourceRepository.cs" />
+    <Compile Include="Repository\ISeasonRepository.cs" />
+    <Compile Include="Repository\IShowRepository.cs" />
     <Compile Include="Types\Collections.cs" />
     <Compile Include="Types\Episode.cs" />
     <Compile Include="Types\ExternalShow.cs" />
@@ -51,7 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BulkLoaders\" />
-    <Folder Include="Repository\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
