@@ -48,6 +48,13 @@
     <Compile Include="Repository\IExternalSourceRepository.cs" />
     <Compile Include="Repository\ISeasonRepository.cs" />
     <Compile Include="Repository\IShowRepository.cs" />
+    <Compile Include="Repository\XMLConfigurationRepository.cs" />
+    <Compile Include="Repository\XMLEpisodeRepository.cs" />
+    <Compile Include="Repository\XMLExternalShowRepository.cs" />
+    <Compile Include="Repository\XMLExternalSourceRepository.cs" />
+    <Compile Include="Repository\XMLRepositoryFactory.cs" />
+    <Compile Include="Repository\XMLSeasonRepository.cs" />
+    <Compile Include="Repository\XMLShowRepository.cs" />
     <Compile Include="Types\Collections.cs" />
     <Compile Include="Types\Episode.cs" />
     <Compile Include="Types\ExternalShow.cs" />

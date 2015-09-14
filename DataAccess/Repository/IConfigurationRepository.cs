@@ -7,8 +7,8 @@ namespace DataAccess.Repository
 {
     public interface IConfigurationRepository
     {
-        string GetValue(string Setting);
-        void SetValue(string Setting, string Value, bool persist = true);
-        void ClearSetting(string Setting, bool persist = true);
+        string GetValue(string setting);
+        void SetValue(string setting, string value, bool persist = true);
+        void ClearSetting(string setting, bool persist = true);
     }
 }
