@@ -45,7 +45,7 @@ namespace DataAccess.Repository
         public Episode GetEpisode(Season season, string episode)
         {
             Episode _episode;
-            if (cacheByComposite.TryGetValue(BuildComposite(season, episode), out _episode)) { return _episode; }
+            if (cacheByComposite.TryGetValue(season.Composite, out _episode)) { return _episode; }
             //The building of the show would have loaded any seasons and episodes for it, so if it wasn't found in the cache it didn't exist.
             return null;
         }
@@ -73,7 +73,7 @@ namespace DataAccess.Repository
         {
             //Updated references and cache
             deleted.Season.Episodes.Remove(deleted);
-            cacheByComposite.Remove(BuildComposite(deleted.Season, deleted.EpisodeNo));
+            cacheByComposite.Remove(deleted.Composite);
             cacheByID.Remove(deleted.ID);
             //Remove from XML and persist
             FindElementByID(deleted.ID).Remove();
@@ -187,10 +187,6 @@ namespace DataAccess.Repository
                     select XElement).FirstOrDefault();
         }
         #endregion
-        private string BuildComposite(Season season, string episode)
-        {
-            return string.Format("{0}-S{1}E{2}", season.Show.Title, season.SeasonNo, episode);
-        }
         private Episode create(Season season, string episodeNo = null, long id = 0)
         {
             Episode _episode = new Episode(season);
@@ -209,7 +205,7 @@ namespace DataAccess.Repository
             {
                 //Store in cache
                 _episode.EpisodeNo = episodeNo;
-                cacheByComposite.Add(BuildComposite(season, episodeNo), _episode);
+                cacheByComposite.Add(_episode.Composite, _episode);
             }
             //Add to dictionaries and persist
             cacheByID.Add(_episode.ID, _episode);
@@ -231,18 +227,14 @@ namespace DataAccess.Repository
                     //Re-add with new ID
                     cacheByID.Add(_episode.ID, _episode);
                     break;
-                case "EpisodeNo":
-                case "Season":
-                    //Season or Show has changed, we need to change the pointer in the composite cache
+                case "Composite":
+                    //we need to change the pointer in the composite cache
                     foreach (var item in cacheByComposite.Where(kvp => kvp.Value == _episode).ToList())
                     {
                         cacheByComposite.Remove(item.Key);
                     }
                     //Re-add with new title
-                    cacheByComposite.Add(BuildComposite(_episode.Season, _episode.EpisodeNo), _episode);
-                    break;
-                default:
-                    //Ignore all other changes
+                    cacheByComposite.Add(_episode.Composite, _episode);
                     break;
             }
         }

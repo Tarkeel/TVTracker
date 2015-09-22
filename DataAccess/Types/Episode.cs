@@ -10,8 +10,13 @@ namespace DataAccess.Types
     {
         internal Episode(Season _season)
         {
+            rating = -1;
             season = _season;
-            if (season != null) { season.Episodes.Add(this); }
+            if (season != null)
+            {
+                season.PropertyChanged += Season_PropertyChanged; 
+                season.Episodes.Add(this);
+            }
         }
         private long id;
         public long ID
@@ -23,7 +28,11 @@ namespace DataAccess.Types
         public string EpisodeNo
         {
             get { return episodeNo; }
-            set { VerifyPropertyChange(ref episodeNo, ref value); }
+            set
+            {
+                //Changing the episodeNo will also change the composite for the episode.
+                if (VerifyPropertyChange(ref episodeNo, ref value)) { FirePropertyChanged("Composite"); }
+            }
         }
         private string code;
         public string Code
@@ -64,9 +73,38 @@ namespace DataAccess.Types
                 Season oldSeason = season;
                 if (VerifyPropertyChange(ref season, ref value))
                 {
+                    //Update the episode collections of both the old and new season.
                     if (oldSeason != null) { oldSeason.Episodes.Remove(this); }
                     if (season != null) { season.Episodes.Add(this); }
+                    //Change which season we are listening to changes in show for
+                    if (oldSeason != null) { oldSeason.PropertyChanged -= Season_PropertyChanged; }
+                    if (season != null) { season.PropertyChanged += Season_PropertyChanged; }
+                    //Changing the season will also change the composite for the episode.
+                    FirePropertyChanged("Composite");
                 }
+            }
+        }
+        /// <summary>
+        /// A composite identifier containing the name of the show that the season belongs to,the numbering of the season and the numbering of the episode.
+        /// </summary>
+        public string Composite
+        {
+            get
+            {
+                string _title = "Unknown-S0";
+                if (season != null) { _title = season.Composite; }
+                return String.Format("{0}E{1}", _title, episodeNo);
+            }
+        }
+        private void Season_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            Season _season = (Season)sender;
+            switch (e.PropertyName)
+            {
+                case "Show":
+                    //Changing the show of the episode's season will also change the composite for the episode.
+                    FirePropertyChanged("Composite");
+                    break;
             }
         }
     }

@@ -10,6 +10,7 @@ namespace DataAccess.Types
     {
         internal Season(Show _show)
         {
+            seasonNo = -1;
             episodes = new ObservableEpisodeCollection();
             show = _show;
             if (show != null) { show.Seasons.Add(this); }
@@ -21,7 +22,6 @@ namespace DataAccess.Types
             set { VerifyPropertyChange(ref id, ref value); }
         }
         private int seasonNo;
-
         public int SeasonNo
         {
             get { return seasonNo; }
@@ -50,5 +50,17 @@ namespace DataAccess.Types
         private ObservableEpisodeCollection episodes;
         public ObservableEpisodeCollection Episodes { get { return episodes; } }
 
+        /// <summary>
+        /// A composite identifier containing the name of the show that the season belongs to and the numbering of the season.
+        /// </summary>
+        public string Composite
+        {
+            get
+            {
+                string _title = "Unknown";
+                if (show != null) { _title = show.Title; }
+                return String.Format("{0}-S{1}", _title, seasonNo);
+            }
+        }
     }
 }
