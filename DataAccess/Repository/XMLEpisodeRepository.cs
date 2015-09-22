@@ -42,12 +42,13 @@ namespace DataAccess.Repository
             if (cacheByID.TryGetValue(id, out _episode)) { return _episode; }
             return Parse(FindElementByID(id));
         }
-        public Episode GetEpisode(Season season, string episode)
+        public Episode GetEpisode(Season season, string episodeNo)
         {
-            Episode _episode;
-            if (cacheByComposite.TryGetValue(season.Composite, out _episode)) { return _episode; }
-            //The building of the show would have loaded any seasons and episodes for it, so if it wasn't found in the cache it didn't exist.
-            return null;
+            //See if the show contains the given season
+            return (from Episode episode in season.Episodes
+                    where episode.EpisodeNo == episodeNo
+                    select episode).FirstOrDefault();
+            //The building of the show would have loaded any seasons and episodes for it, so if it wasn't found it didn't exist.
         }
         public Episode CreateOrGetEpisode(Season season, string episode, bool persist = true)
         {
