@@ -126,7 +126,7 @@ namespace DataAccess.Repository
             {
                 //Check if the ID is stored first
                 if (cacheByID.TryGetValue(Convert.ToInt32(_id.Value), out _season)) { return _season; }
-                _season = create(_show, Convert.ToInt32(_id.Value));
+                _season = create(_show, id: Convert.ToInt32(_id.Value));
             }
             //SeasonNo attribute
             XAttribute _seasonNo = element.Attribute("SeasonNo");
