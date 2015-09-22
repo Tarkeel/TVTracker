@@ -34,13 +34,13 @@ namespace DataAccess.Repository
             //If not, find the correct element in the file and parse it.
             return Parse(FindElement(id));
         }
-        public Season GetSeason(Show show, int season)
+        public Season GetSeason(Show show, int seasonNo)
         {
-            Season _season;
-            //Try to find it in dictionary first
-            if (cacheByComposite.TryGetValue(BuildComposite(show, season), out _season)) { return _season; }
-            //The building of the show would have loaded any seasons for it, so if it wasn't found in the cache it didn't exist.
-            return null;
+            //See if the show contains the given season
+            return (from Season season in show.Seasons
+                    where season.SeasonNo == seasonNo
+                    select season).FirstOrDefault();
+            //The building of the show would have loaded any seasons for it, so if it wasn't found it didn't exist.
         }
         public Season CreateOrGetSeason(Show show, int season, bool persist = true)
         {
@@ -75,7 +75,7 @@ namespace DataAccess.Repository
             {
                 //Updated references and cache
                 deleted.Show.Seasons.Remove(deleted);
-                cacheByComposite.Remove(BuildComposite(deleted.Show, deleted.SeasonNo));
+                cacheByComposite.Remove(deleted.Composite);
                 cacheByID.Remove(deleted.ID);
                 //Remove from XML and persist
                 FindElement(deleted.ID).Remove();
@@ -94,7 +94,7 @@ namespace DataAccess.Repository
             }
             //SeasonNo
             XAttribute _seasonNo = element.Attribute("SeasonNo");
-            if (_item.SeasonNo > 0)
+            if (_item.SeasonNo >= 0)
             {
                 if (_seasonNo != null) { _seasonNo.Value = Convert.ToString(_item.SeasonNo); }
                 else { element.Add(new XAttribute("SeasonNo", _item.SeasonNo)); }
@@ -150,10 +150,6 @@ namespace DataAccess.Repository
                     select XElement).FirstOrDefault();
         }
         #endregion
-        private string BuildComposite(Show show, int season)
-        {
-            return string.Format("{0}-S{1}", show.Title, season);
-        }
         private Season create(Show show, int seasonNo = 0, long id = 0)
         {
             Season _season = new Season(show);
@@ -172,7 +168,7 @@ namespace DataAccess.Repository
             {
                 //Store in cache
                 _season.SeasonNo = seasonNo;
-                cacheByComposite.Add(BuildComposite(show, seasonNo), _season);
+                cacheByComposite.Add(_season.Composite, _season);
             }
             //Add to dictionaries and persist
             cacheByID.Add(_season.ID, _season);
@@ -194,16 +190,14 @@ namespace DataAccess.Repository
                     //Re-add with new ID
                     cacheByID.Add(_season.ID, _season);
                     break;
-                case "SeasonNo":
-                    //TODO: Forward trigger to all episodes, as they need their composite updated
-                case "Show":
+                case "Composite":
                     //Season or Show has changed, we need to change the pointer in the composite cache
                     foreach (var item in cacheByComposite.Where(kvp => kvp.Value == _season).ToList())
                     {
                         cacheByComposite.Remove(item.Key);
                     }
                     //Re-add with new title
-                    cacheByComposite.Add(BuildComposite(_season.Show, _season.SeasonNo), _season);
+                    cacheByComposite.Add(_season.Composite, _season);
                     break;
                 default:
                     //Ignore all other changes
