@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVTracker", "TVTracker\TVTracker.csproj", "{DDE30B33-E57C-421B-8EEA-4CEB69E370FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportManager", "ImportManager\ImportManager.csproj", "{69366F87-5706-4DB6-98AC-01353CF5B36C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{DDE30B33-E57C-421B-8EEA-4CEB69E370FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDE30B33-E57C-421B-8EEA-4CEB69E370FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDE30B33-E57C-421B-8EEA-4CEB69E370FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69366F87-5706-4DB6-98AC-01353CF5B36C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69366F87-5706-4DB6-98AC-01353CF5B36C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69366F87-5706-4DB6-98AC-01353CF5B36C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69366F87-5706-4DB6-98AC-01353CF5B36C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

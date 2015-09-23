@@ -1,0 +1,132 @@
+﻿<Window x:Class="ImportManager.GUI.EpisodeImportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:logic="clr-namespace:ImportManager.Logic"
+        xmlns:types="clr-namespace:ImportManager.Types"
+        Title="ImportWindow" Height="300" Width="800">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <logic:StatusToColourConverter x:Key="StatusColour"/>
+    </Window.Resources>
+    <Window.DataContext>
+        <logic:ImportViewModel />
+    </Window.DataContext>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Import"/>
+        </Menu>
+        <Button Name="Import" DockPanel.Dock="Bottom"
+                Content="Import" Command="{Binding ImportCommand}"/>
+        <DataGrid Name="ImportRows"
+                  ItemsSource="{Binding Rows}" AutoGenerateColumns="False" SelectionUnit="FullRow"
+                  HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                  HorizontalContentAlignment="Stretch"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <DataGrid.Resources>
+                <types:BindingProxy x:Key="proxy" Data="{Binding}" />
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Expander IsExpanded="{Binding Expanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Episode/Source:" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <Ellipse Name="RowStatus"
+                                     Height="20" Width="20" DockPanel.Dock="Left" VerticalAlignment="Top"
+                                     Fill="{Binding RowStatus, Converter={StaticResource StatusColour}, Mode=OneWay}"/>
+                                <Label DockPanel.Dock="Top" 
+                                   Content="{Binding CompositeIdentifier, Mode=OneTime}" Height="24"/>
+                                <ListBox Name="SourceList" DockPanel.Dock="Bottom"
+                                     Visibility="{Binding Expanded, Converter={StaticResource BoolToVis}, Mode=TwoWay}"
+                                     ItemsSource="{Binding ImportSources}" SelectedItem="{Binding SelectedTitle}" IsSynchronizedWithCurrentItem="True"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Title" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DockPanel Name="TitlePanel">
+                                <Ellipse Name="TitleStatus"
+                                     Height="20" Width="20" DockPanel.Dock="Left" VerticalAlignment="Top"
+                                     Fill="{Binding TitleStatus, Converter={StaticResource StatusColour}, Mode=OneWay}"/>
+                                <ComboBox Name="TitleCombo" DockPanel.Dock="Top" 
+                                      ItemsSource="{Binding ImportTitles}"  SelectedItem="{Binding SelectedTitle}" IsSynchronizedWithCurrentItem="True"
+                                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" 
+                                      Height="24"/>
+                                <ListBox Name="TitleList" DockPanel.Dock="Bottom"
+                                     ItemsSource="{Binding ImportTitles}" SelectedItem="{Binding SelectedTitle}" IsSynchronizedWithCurrentItem="True"
+                                     Visibility="{Binding Expanded, Converter={StaticResource BoolToVis}, Mode=TwoWay}"
+                                     Background="{Binding TitleStatus, Converter={StaticResource StatusColour}, Mode=OneWay}"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Code" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DockPanel Name="CodePanel">
+                                <Ellipse Name="CodeStatus"
+                                     Height="20" Width="20" DockPanel.Dock="Left" VerticalAlignment="Top"
+                                     Fill="{Binding CodeStatus, Converter={StaticResource StatusColour}, Mode=OneWay}"/>
+                                <ComboBox Name="CodeCombo" DockPanel.Dock="Top" 
+                                      ItemsSource="{Binding ImportCodes}"  SelectedItem="{Binding SelectedCode}" IsSynchronizedWithCurrentItem="True"
+                                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" 
+                                      Height="24"/>
+                                <ListBox Name="CodeList" DockPanel.Dock="Bottom"
+                                     ItemsSource="{Binding ImportCodes}" SelectedItem="{Binding SelectedCode}" IsSynchronizedWithCurrentItem="True"
+                                     Visibility="{Binding Expanded, Converter={StaticResource BoolToVis}, Mode=TwoWay}"
+                                     Background="{Binding CodeStatus, Converter={StaticResource StatusColour}, Mode=OneWay}"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Rating" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DockPanel Name="RatingPanel">
+                                <Ellipse Name="RatingStatus"
+                                     Height="20" Width="20" DockPanel.Dock="Left" VerticalAlignment="Top"
+                                     Fill="{Binding RatingStatus, Converter={StaticResource StatusColour}, Mode=OneWay}"/>
+                                <ComboBox Name="RatingCombo" DockPanel.Dock="Top" 
+                                      ItemsSource="{Binding ImportRatings}"  SelectedItem="{Binding SelectedRating}" IsSynchronizedWithCurrentItem="True"
+                                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" 
+                                      Height="24"/>
+                                <ListBox Name="RatingList" DockPanel.Dock="Bottom"
+                                     ItemsSource="{Binding ImportRatings}" SelectedItem="{Binding SelectedRating}" IsSynchronizedWithCurrentItem="True"
+                                     Visibility="{Binding Expanded, Converter={StaticResource BoolToVis}, Mode=TwoWay}"
+                                     Background="{Binding RatingStatus, Converter={StaticResource StatusColour}, Mode=OneWay}"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Airdate" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DockPanel Name="AirdatePanel">
+                                <Ellipse Name="AirdateStatus"
+                                     Height="20" Width="20" DockPanel.Dock="Left" VerticalAlignment="Top"
+                                     Fill="{Binding AirdateStatus, Converter={StaticResource StatusColour}, Mode=OneWay}"/>
+                                <ComboBox Name="AirdateCombo" DockPanel.Dock="Top" 
+                                      ItemsSource="{Binding ImportAirdates}"  SelectedItem="{Binding SelectedAirdate}" IsSynchronizedWithCurrentItem="True"
+                                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" 
+                                      Height="24"/>
+                                <ListBox Name="AirdateList" DockPanel.Dock="Bottom"
+                                     ItemsSource="{Binding ImportAirdates}" SelectedItem="{Binding SelectedAirdate}" IsSynchronizedWithCurrentItem="True"
+                                     Visibility="{Binding Expanded, Converter={StaticResource BoolToVis}, Mode=TwoWay}"
+                                     Background="{Binding AirdateStatus, Converter={StaticResource StatusColour}, Mode=OneWay}"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>
