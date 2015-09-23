@@ -11,9 +11,9 @@ using DataAccess.Types;
 using DataAccess.Repository;
 
 
-namespace TVTracker.Logic
+namespace TVTracker.Browse
 {
-    class AdministrationViewModel
+    public class BrowseViewModel
     {
 
         //TODO: Implement the observers to listen to newly added shows, seasons and episodes.
@@ -114,7 +114,7 @@ namespace TVTracker.Logic
         }
         #endregion
 
-        public AdministrationViewModel()
+        public BrowseViewModel()
         {
             //TODO: Load this from a setting
             repository = XMLRepositoryFactory.Instance;
